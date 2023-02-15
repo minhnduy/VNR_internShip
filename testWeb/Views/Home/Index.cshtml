@@ -1,0 +1,59 @@
+﻿@model IEnumerable<testWeb.Models.KhoaHoc>
+@{
+    ViewBag.Title = "Home Page";
+    var monHoc = new List<testWeb.Models.MonHoc>();
+}
+
+<div class="container">
+    <div class="row">
+        <div class="main col-md-9"">
+            <div class="title">
+                <h2 id="nameTitle">Khóa học:</h2>
+                <hr style="border: 2px solid green" />
+                <div class="text-left" id="Test"></div>
+            </div>
+        </div>
+        <div class="khoahoc col-md-3">
+            <h2>Khóa học</h2>
+            <hr style="border: 2px solid green; margin-top: 5px;" />
+            <div class="listCourse">
+                <table class="table">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <h3 onclick="select(@item.ID)" id="courseId-@item.ID">@item.TenKhoaHoc</h3>
+                            </td>
+                        </tr>
+                     }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function select(Id) {
+            console.log(Id)
+
+            var data = {
+                'courseID': Id
+            };
+            $.ajax({
+                type: "Get",
+                url: "/Home/ListSubject",
+                data: data,
+                success: function (res) {
+                    console.log(res);
+                    document.getElementById("nameTitle").innerText = "Khóa học: " + document.getElementById("courseId-" + Id).innerText;
+                    result = '';
+                    for (var i = 0; i < res.length; i++) {
+                        result = result + '<tr><td><h4>' + res[i].TenMonHoc + '</h4></td></tr>';
+                    }
+                    document.getElementById("Test").innerHTML = result
+                }
+            });
+        }
+    </script>
+}
